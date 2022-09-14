@@ -6,34 +6,35 @@
  <artifactId>test-ci</artifactId>
  <version>${revision}</version>
  <properties>
-  <revision>1.0.0-SNAPSHOT</revision>
+  <revision>1.1-SNAPSHOT</revision>
  </properties>
+
+ <scm>
+  <developerConnection>scm:git:git@github.com:alpapad/test-release-pipeline.git</developerConnection>
+ </scm>
+
  <build>
   <plugins>
    <plugin>
-    <groupId>org.codehaus.mojo</groupId>
-    <artifactId>flatten-maven-plugin</artifactId>
-    <version>1.1.0</version>
-    <configuration>
-     <updatePomFile>true</updatePomFile>
-     <flattenMode>resolveCiFriendliesOnly</flattenMode>
-    </configuration>
+    <groupId>com.outbrain.swinfra</groupId>
+    <artifactId>ci-friendly-flatten-maven-plugin</artifactId>
+    <version>1.0.14</version>
     <executions>
      <execution>
-      <id>flatten</id>
-      <phase>process-resources</phase>
       <goals>
+       <!-- Ensure proper cleanup. Will run on clean phase -->
+       <goal>clean</goal>
+       <!-- Enable ci-friendly version resolution. Will run on process-resources 
+        phase -->
        <goal>flatten</goal>
       </goals>
      </execution>
-     <execution>
-      <id>flatten.clean</id>
-      <phase>clean</phase>
-      <goals>
-       <goal>clean</goal>
-      </goals>
-     </execution>
     </executions>
+    <configuration>
+     <prefixRegex>v</prefixRegex>
+     <tagBase>v</tagBase>
+     <tag>v${project.version}</tag>
+    </configuration>
    </plugin>
   </plugins>
  </build>
